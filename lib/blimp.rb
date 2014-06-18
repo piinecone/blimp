@@ -6,6 +6,12 @@ module Blimp
   module Application
     def self.run!
       cmd = ARGV.shift
+
+      if cmd != 'init' && `git config blimp.bucket`.empty?
+        puts "Please run `blimp init`."
+        exit
+      end
+
       case cmd
         when 'watch'
           require 'blimp/watch'
