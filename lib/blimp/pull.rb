@@ -1,5 +1,6 @@
 require 'blimp/git'
 require 'blimp/s3'
+require 'fileutils'
 
 module Blimp
   module Pull
@@ -54,6 +55,8 @@ module Blimp
     end
 
     def self.write_object_to_path(object, path)
+      dir = path.gsub(path.split("/").last, '')
+      FileUtils.mkdir_p(dir)
       File.open(path, "w") do |f|
         f.write object.read
       end
