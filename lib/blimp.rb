@@ -22,19 +22,18 @@ module Blimp
         when 'unwatch'
           require 'blimp/unwatch'
           Blimp::Unwatch.run!
-        when 'config'
-          require 'blimp/config'
-          Blimp::Config.run!
+        when 'init'
+          require 'blimp/init'
+          Blimp::Init.run!
         else
-           print <<EOF
+          print <<EOF
 usage: blimp status|watch|unwatch|push|pull|config
 
+   init
    status
    watch
-   unwatch
    push
    pull
-   config
 
 EOF
       end

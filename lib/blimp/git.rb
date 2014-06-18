@@ -9,9 +9,9 @@ module Blimp
         sha.gsub!('\t', '')
         sha.gsub!('\r', '')
         sha.gsub!(/\s+/, '')
-        puts "Assets for HEAD will be stored under #{Blimp::S3.hostname}/#{Blimp::S3.bucketname}/#{sha}"
+        puts "Assets for HEAD will be stored under #{Blimp::S3.hostname}/#{Blimp::S3.bucket_name}/#{sha}"
       else
-        puts "Could not get a SHA. Please commit something with git!"
+        puts "Could not get a SHA. Please commit something!"
       end
 
       sha

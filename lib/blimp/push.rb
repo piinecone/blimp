@@ -13,11 +13,11 @@ module Blimp
           filepaths.each_with_index do |filepath, index|
             puts "(#{index+1}/#{filepaths.count})"
             key = "#{Blimp.project_root}/#{dir_name}/#{filepath}"
-            puts "Preparing to create #{s3.hostname}/#{s3.bucketname}/#{key}..."
+            puts "Preparing to create #{s3.hostname}/#{s3.bucket_name}/#{key}..."
             if bucket.objects[key].exists?
               puts "Warning: #{key} exists, skipping upload. Create a new commit if you want to upload this file."
             else
-              puts "Creating #{s3.hostname}/#{s3.bucketname}/#{key}"
+              puts "Creating #{s3.hostname}/#{s3.bucket_name}/#{key}"
               bucket.objects[key].write(file: filepath)
             end
           end
