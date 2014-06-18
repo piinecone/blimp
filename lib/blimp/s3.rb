@@ -12,6 +12,10 @@ module Blimp
       HOST
     end
 
+    def self.default_bucket_name
+      '<s3_bucket_name>'
+    end
+
     def self.bucket_name
       @bucket_name ||= `git config blimp.bucket`.chomp
     end
@@ -32,6 +36,10 @@ module Blimp
       puts "AWS access key id: #{ENV['AWS_ACCESS_KEY_ID']}"
       puts "AWS secret key:    #{ENV['AWS_SECRET_ACCESS_KEY']}"
       puts "AWS bucket:        #{bucket_name}"
+      puts "AWS project root:  #{bucket_name}/#{Blimp.project_root}/"
+      if Blimp::S3.bucket_name == Blimp::S3.default_bucket_name
+        puts "\nIMPORTANT: please update your Blimp bucket name in .git/config\n\n"
+      end
     end
   end
 end
