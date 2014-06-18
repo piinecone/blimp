@@ -1,5 +1,6 @@
 require 'blimp/s3'
 require 'blimp/git'
+require 'blimp/utils'
 
 module Blimp
   module Push
@@ -14,12 +15,11 @@ module Blimp
           filepaths.each_with_index do |filepath, index|
             puts "(#{index+1}/#{filepaths.count})"
             key = "#{Blimp.project_root}/#{dir_name}/#{filepath}"
-            puts "Preparing to create #{s3.hostname}/#{s3.bucket_name}/#{key}..."
-            if bucket.objects[key].exists?
-              puts "Warning: #{key} exists, skipping upload. Create a new commit if you want to upload this file."
+            if Blimp::Utils.file_and_object_match?(filepath, bucket.objects[key])
+              puts "Warning: #{key} exists exactly, skipping upload. Create a new commit if you want to upload this file."
             else
-              puts "Creating #{s3.hostname}/#{s3.bucket_name}/#{key}"
-              bucket.objects[key].write(file: filepath)
+              puts "Uploading #{s3.hostname}/#{s3.bucket_name}/#{key}"
+              upload_object key, filepath
             end
           end
         end
@@ -27,6 +27,25 @@ module Blimp
     end
 
     private
+
+    def self.upload_object(key, filepath)
+      # check if this exact object exists remotely
+      previous_sha = Blimp::Git.sha_before(current_sha)
+      while !previous_sha.empty?
+        previous_key = "#{Blimp.project_root}/#{previous_sha}/#{filepath}"
+        object = bucket.objects[previous_key]
+        if Blimp::Utils.file_and_object_match?(filepath, object)
+          puts "#{key} is unchanged; updating its location"
+          object.copy_to(key) # associate it with the current SHA
+          return
+        else
+          previous_sha = Blimp::Git.sha_before(previous_sha)
+        end
+      end
+
+      # this exact object doesn't exist at all remotely; upload it
+      bucket.objects[key].write(file: filepath)
+    end
 
     def self.s3
       @s3 ||= Blimp::S3

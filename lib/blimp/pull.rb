@@ -1,6 +1,7 @@
 require 'blimp/git'
 require 'blimp/s3'
 require 'fileutils'
+require 'blimp/utils'
 
 module Blimp
   module Pull
@@ -20,7 +21,13 @@ module Blimp
         puts "Would you like to download files from the previous SHA? [y/n]"
         response = gets.chomp
         if response == 'y'
-          fetch_from_remote_for Blimp::Git.sha_before(sha)
+          sha = Blimp::Git.sha_before(sha)
+          if !sha.empty?
+            fetch_from_remote_for sha
+          else
+            puts "No more SHAs remaining. Someone needs to `blimp push` something!"
+            exit
+          end
         else
           puts "Please run `blimp push` for #{sha}. Exiting..."
           exit
@@ -48,6 +55,9 @@ module Blimp
           else
             puts "Skipping #{object.key}. Push, delete, or move this file and `blimp pull` to resynchronize."
           end
+        elsif Blimp::Utils.file_and_object_match?(path, object)
+          puts "Your local is up to date, skipping..."
+          return
         end
       else
         write_object_to_path object, path

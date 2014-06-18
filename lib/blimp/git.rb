@@ -32,8 +32,7 @@ module Blimp
       if values.count > index
         values[index]
       else
-        puts "No more SHAs remaining. Someone needs to `blimp push` something!"
-        exit
+        return ""
       end
     end
   end
