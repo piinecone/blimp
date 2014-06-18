@@ -1,6 +1,6 @@
 module Blimp
   def self.project_root
-    File.basename Dir.getwd
+    File.basename(Dir.getwd).downcase
   end
 
   module Application
