@@ -31,6 +31,9 @@ module Blimp
         when 'init'
           require 'blimp/init'
           Blimp::Init.run!
+        when 'whoami'
+          require 'blimp/s3'
+          Blimp::S3.whoami
         else
           print <<EOF
 usage: blimp status|watch|unwatch|push|pull|config

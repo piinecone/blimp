@@ -29,9 +29,9 @@ module Blimp
     end
 
     def self.whoami
-      puts ENV['AWS_ACCESS_KEY_ID']
-      puts ENV['AWS_SECRET_ACCESS_KEY']
-      # puts s3.buckets.map(&:name)
+      puts "AWS access key id: #{ENV['AWS_ACCESS_KEY_ID']}"
+      puts "AWS secret key:    #{ENV['AWS_SECRET_ACCESS_KEY']}"
+      puts "AWS bucket:        #{bucket_name}"
     end
   end
 end
