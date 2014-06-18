@@ -8,7 +8,7 @@ module Blimp
       cmd = ARGV.shift
 
       if cmd != 'init' && `git config blimp.bucket`.empty?
-        puts "Please run `blimp init`."
+        puts "Please run `blimp init` from within a git repo."
         exit
       end
 
