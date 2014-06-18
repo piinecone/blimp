@@ -86,7 +86,8 @@ Caveats
 Todos
 -----
 
-* Optimize `blimp push` by skipping files that haven't changed and updating their S3 locations to the current SHA
+* Add a `blimp prune` command to delete folders for older revisions
+* Make the skip file functionality of `blimp push` and `blimp pull` smarter (and faster)
 * Do not upload or download files matching patterns listed in .blimpignore
 * Update `blimp status` to show only the files that differ from their remote counterparts
 * Create an automated test suite
