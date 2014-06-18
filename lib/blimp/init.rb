@@ -1,14 +1,17 @@
 module Blimp
   module Init
     def self.run!
+      unless File.exists?('.git/config')
+        puts "Please run `git init` before `blimp init`."
+        exit
+      end
+
       if File.exists?('.git/config') && `git config blimp.bucket`.empty?
         File.open('.git/config', 'a') do |file|
           file << "[blimp]\n"
           file << "    bucket = <your_s3_bucket_name>\n"
         end
         puts "Your .git/config file has been modified."
-      else
-        puts "Please run `git init` before `blimp init`"
       end
 
       unless File.exists?('.blimp')
