@@ -4,12 +4,13 @@ require 'blimp/git'
 module Blimp
   module Push
     def self.run!
-      puts 'Running blimp push...'
       dir_name = current_sha
       unless dir_name.empty?
         # gather file paths to upload
         filepaths = gather_filepaths
-        begin
+        if filepaths.empty?
+          puts "Nothing to do! Run `blimp watch *.file_extension` to add files to blimp."
+        else
           filepaths.each_with_index do |filepath, index|
             puts "(#{index+1}/#{filepaths.count})"
             key = "#{Blimp.project_root}/#{dir_name}/#{filepath}"
@@ -40,7 +41,7 @@ module Blimp
     end
     
     def self.current_sha
-      git.current_sha
+      @current_sha ||= git.current_sha('push')
     end
 
     def self.gather_filepaths
@@ -50,6 +51,7 @@ module Blimp
         match = "**/*.#{extension}"
         paths << Dir[match]
       end
+      # TODO prune file paths matching .blimpignore patterns
 
       paths.flatten
     end

@@ -6,16 +6,32 @@ module Blimp
     def self.run!
       # do not overwrite local files unless the -f option is used
       puts "HEAD is at #{current_sha}"
-      puts "Downloading assets from #{remote_prefix}"
-      objects = s3.bucket.objects.with_prefix(remote_prefix)
-      objects.each_with_index do |object, index|
-        local_key = local_key_for_object(object)
-        puts "(#{index+1}/#{objects.count}) Writing #{object.key} to #{local_key}..."
-        download object, local_key
-      end
+      fetch_from_remote_for current_sha
     end
 
     private
+
+    def self.fetch_from_remote_for(sha)
+      puts "Fetching assets from #{remote(sha)}"
+      objects = s3.bucket.objects.with_prefix(remote(sha))
+      if objects.count == 0
+        puts "Error: there are no files available on the remote for #{sha}."
+        puts "Would you like to download files from the previous SHA? [y/n]"
+        response = gets.chomp
+        if response == 'y'
+          fetch_from_remote_for Blimp::Git.sha_before(sha)
+        else
+          puts "Please run `blimp push` for #{sha}. Exiting..."
+          exit
+        end
+      else
+        objects.each_with_index do |object, index|
+          local_key = local_key_for_object(object, sha)
+          puts "(#{index+1}/#{objects.count}) Writing #{object.key} to #{local_key}..."
+          download object, local_key
+        end
+      end
+    end
 
     def self.download(object, path)
       if File.exists?(path)
@@ -43,12 +59,12 @@ module Blimp
       end
     end
 
-    def self.remote_prefix
-      "#{Blimp.project_root}/#{current_sha}" 
+    def self.remote(sha)
+      "#{Blimp.project_root}/#{sha}"
     end
 
-    def self.local_key_for_object(object)
-      "#{Dir.getwd}#{object.key.gsub(remote_prefix, '')}"
+    def self.local_key_for_object(object, sha)
+      "#{Dir.getwd}#{object.key.gsub(remote(sha), '')}"
     end
 
     def self.s3
