@@ -1,4 +1,8 @@
 module Blimp
+  def self.project_root
+    File.basename Dir.getwd
+  end
+
   module Application
     def self.run!
       cmd = ARGV.shift

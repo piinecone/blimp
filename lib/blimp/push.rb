@@ -1,27 +1,23 @@
-require 'aws'
-require 'pry'
+require 'blimp/s3'
+require 'blimp/git'
 
 module Blimp
   module Push
-    S3_HOST = 'https://s3.amazonaws.com'
-    BUCKET_NAME = 'piinecone'
-
     def self.run!
       puts 'Running blimp push...'
-      # find SHA for push
-      dir_name = head_sha
+      dir_name = current_sha
       unless dir_name.empty?
         # gather file paths to upload
         filepaths = gather_filepaths
         begin
           filepaths.each_with_index do |filepath, index|
             puts "(#{index+1}/#{filepaths.count})"
-            key = "#{project_root}/#{dir_name}/#{filepath}"
-            puts "Preparing to create #{key} remotely..."
+            key = "#{Blimp.project_root}/#{dir_name}/#{filepath}"
+            puts "Preparing to create #{s3.hostname}/#{s3.bucketname}/#{key}..."
             if bucket.objects[key].exists?
               puts "Warning: #{key} exists, skipping upload. Create a new commit if you want to upload this file."
             else
-              puts "Creating #{S3_HOST}/#{BUCKET_NAME}/#{key}"
+              puts "Creating #{s3.hostname}/#{s3.bucketname}/#{key}"
               bucket.objects[key].write(file: filepath)
             end
           end
@@ -31,48 +27,20 @@ module Blimp
 
     private
 
-    def self.project_root
-      File.basename Dir.getwd
-    end
-
-    def self.directory_exists?(dir_name)
-      puts bucket.objects[dir_name]
-    end
-
-    def self.whoami
-        puts ENV['AWS_ACCESS_KEY_ID']
-        puts ENV['AWS_SECRET_ACCESS_KEY']
-        puts s3.buckets.map(&:name)
-    end
-
     def self.s3
-      @s3 ||= AWS::S3.new
+      @s3 ||= Blimp::S3
     end
 
     def self.bucket
-      @bucket ||= find_or_create_bucket(BUCKET_NAME)
-    end
-    
-    def self.find_or_create_bucket(name)
-      if s3.buckets.map(&:name).include?(name)
-        s3.buckets[name]
-      else
-        s3.buckets.create(name)
-      end
+      @bucket ||= s3.find_or_create_bucket
     end
 
-    def self.head_sha
-      value = `git rev-parse --verify HEAD`
-      if $?.exitstatus == 0
-        puts "Assets for #{value} will be stored at internet.com:/#{value}"
-      else
-        puts "Could not determine a SHA. Please commit something with git!"
-      end
-      value.gsub!('\n', '')
-      value.gsub!('\t', '')
-      value.gsub!('\r', '')
-      value.gsub!(/\s+/, '')
-      value
+    def self.git
+      Blimp::Git
+    end
+    
+    def self.current_sha
+      git.current_sha
     end
 
     def self.gather_filepaths
