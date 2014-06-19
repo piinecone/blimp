@@ -12,17 +12,26 @@ module Blimp
         sha.gsub!(/\s+/, '')
         case subcommand
         when 'status'
-          puts "Assets for commit #{sha} will be stored in #{Blimp::S3.hostname}/#{Blimp::S3.bucket_name}/#{Blimp.project_root}/#{sha}"
+          puts "Assets for commit #{emphasized_sha(sha)} will be stored in #{emphasized_path_for(sha)}"
         when 'push'
-          puts "Pushing assets for commit #{sha} to #{Blimp::S3.hostname}/#{Blimp::S3.bucket_name}/#{Blimp.project_root}/#{sha}"
+          puts "Pushing assets for commit #{emphasized_sha(sha)} to #{emphasized_path_for(sha)}"
         when 'pull'
-          puts "Fetching assets for commit #{sha} from #{Blimp::S3.hostname}/#{Blimp::S3.bucket_name}/#{Blimp.project_root}/#{sha}"
+          puts "Fetching assets for commit #{emphasized_sha(sha)} from #{emphasized_path_for(sha)}"
         end
+        Blimp::S3.check_bucket
       else
         puts "Could not get a SHA. Please commit something!"
       end
 
       sha
+    end
+
+    def self.emphasized_sha(sha)
+      sha.yellow
+    end
+
+    def self.emphasized_path_for(sha)
+      "#{Blimp::S3.hostname.yellow}/#{Blimp::S3.bucket_name.yellow}/#{Blimp.project_root.yellow}/#{sha.yellow}"
     end
 
     def self.sha_before(sha)
