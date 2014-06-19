@@ -24,11 +24,12 @@ Installation
 
    `echo 'export PATH=$PATH:/cool/blimp/path/bin' >> ~/.bash_profile`
 
-* export `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables; e.g.:
+* export `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION` environment variables; e.g.:
 
 ```
    echo 'export AWS_ACCESS_KEY_ID=blimpman5000' >> ~/.bash_profile
    echo 'export AWS_SECRET_ACCESS_KEY=letmein' >> ~/.bash_profile
+   echo 'export AWS_DEFAULT_REGION=us-east-1' >> ~/.bash_profile
 ```
 
 * ensure `which blimp` returns something
@@ -46,11 +47,12 @@ Installation
 
    `echo 'export PATH=$PATH:~/cool/blimp/path/bin' >> ~/.bash_profile`
 
-* export `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables; e.g.:
+* export `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION` environment variables; e.g.:
 
 ```
    echo 'export AWS_ACCESS_KEY_ID=blimpman5000' >> ~/.bash_profile
    echo 'export AWS_SECRET_ACCESS_KEY=letmein' >> ~/.bash_profile
+   echo 'export AWS_DEFAULT_REGION=us-east-1' >> ~/.bash_profile
 ```
 
 * ensure `which blimp` returns something
