@@ -1,6 +1,12 @@
+require 'blimp/color'
+
 module Blimp
   def self.project_root
-    File.basename(Dir.getwd).downcase
+    if `git config blimp.folder`.empty?
+      File.basename(Dir.getwd).downcase
+    else
+      `git config blimp.folder`.chomp
+    end
   end
 
   module Application

@@ -8,12 +8,15 @@ module Blimp
         exit
       end
 
+      messages = []
+
       if File.exists?('.git/config') && `git config blimp.bucket`.empty?
         File.open('.git/config', 'a') do |file|
           file << "[blimp]\n"
           file << "    bucket = #{Blimp::S3.default_bucket_name}\n"
+          file << "    folder = #{Blimp.project_root}\n"
         end
-        puts "Your .git/config file has been modified."
+        messages << "Your .git/config file has been modified."
       end
 
       unless File.exists?('.blimp')
@@ -28,21 +31,23 @@ module Blimp
           file << "# *.big_file_extension\n"
           file << "# *.some_other_big_file_extension\n\n"
         end
-        puts "Your .blimp file has been created."
+        messages << "Your .blimp file has been created."
       end
 
-      puts 'Blimp initialized'
       puts "\nWelcome to Blimp!"
       puts "----------------------------------------------------------------------"
-      puts "- Use `blimp watch *.big_file_extension` to tell blimp about big files"
+      puts "- Use #{'`blimp watch *.big_file_extension`'.light_blue} to tell blimp about big files"
       puts "- Blimp will then add the pattern to the .blimp file, like this:"
-      puts "  *.big_file_extension"
+      puts "  #{'*.big_file_extension'.light_blue}"
       puts "- Blimp will also add that same pattern to your .gitignore so you don't accidentally commit them"
       puts "- Files that match the patterns in .blimp will be pushed and pulled to and from the S3 bucket"
       puts "  specified in your .git/config"
       puts "\nYour current configuration:"
       puts "----------------------------------------------------------------------"
       Blimp::S3.whoami
+      messages.each do |message|
+        puts "#{message}".yellow
+      end
       puts "\n"
     end
   end
