@@ -9,6 +9,7 @@ Dependencies
 * ruby
 * git
 * aws-sdk gem
+* aws-sdk-core gem
 * aws s3 account and bucket
 
 Installation
@@ -17,6 +18,7 @@ Installation
 ### OS X ###
 
 * `gem install aws-sdk`
+* `gem install aws-sdk-core --pre`
 * `git clone git@github.com:piinecone/blimp.git /cool/blimp/path/`
 * add /cool/blimp/path/bin to your $PATH; e.g.:
 
@@ -38,6 +40,7 @@ Installation
 * install git and [git bash for windows](http://git-scm.com/downloads)
 * run git bash
 * `gem install aws-sdk`
+* `gem install aws-sdk-core --pre`
 * `git clone git@github.com:piinecone/blimp.git ~/cool/blimp/path/`
 * add ~/cool/blimp/path/bin to your $PATH; e.g.:
 
@@ -88,9 +91,10 @@ Todos
 
 * Add a `blimp prune` command to delete folders for older revisions
 * Make the skip file functionality of `blimp push` and `blimp pull` smarter (and faster)
-* Do not upload or download files matching patterns listed in .blimpignore
+* Do not upload or download files matching patterns listed in `.blimpignore`
 * Update `blimp status` to show only the files that differ from their remote counterparts
 * Create an automated test suite
+* Reduce dependencies
 
 Contributing
 ------------

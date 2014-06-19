@@ -1,11 +1,18 @@
 require 'aws'
+require 'aws-sdk-core'
+require 'blimp/color'
 
 module Blimp
   module S3
     HOST = 'https://s3.amazonaws.com'
+    DEFAULT_BUCKET = '<s3_bucket_name>'
 
     def self.s3
       @s3 ||= AWS::S3.new
+    end
+
+    def self.core
+      @core ||= Aws::S3.new
     end
 
     def self.hostname
@@ -13,7 +20,7 @@ module Blimp
     end
 
     def self.default_bucket_name
-      '<s3_bucket_name>'
+      DEFAULT_BUCKET
     end
 
     def self.bucket_name
