@@ -1,9 +1,9 @@
+require 'digest'
+
 module Blimp
   module Utils
     def self.file_and_object_match?(filepath, object)
-      object.exists? &&
-        File.stat(filepath).mtime <= object.last_modified &&
-        object.content_length == File.stat(filepath).size
+      object.exists? && object.etag.gsub(/"/, '') == Digest::MD5.hexdigest(File.read(filepath))
     end
   end
 end
