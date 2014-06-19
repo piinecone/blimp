@@ -1,16 +1,22 @@
 require 'blimp/color'
+require 'pry'
 
 module Blimp
   def self.project_root
     if `git config blimp.folder`.empty?
       File.basename(Dir.getwd).downcase
     else
-      `git config blimp.folder`.chomp
+      `git config blimp.folder`.chomp.downcase
     end
   end
 
   module Application
     def self.run!
+      unless File.directory?('.git')
+        puts "Please run `blimp` from the project's root directory."
+        exit
+      end
+
       cmd = ARGV.shift
 
       if cmd != 'init' && `git config blimp.bucket`.empty?
