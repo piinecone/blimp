@@ -13,12 +13,12 @@ module Blimp
           puts "Nothing to do! Run `blimp watch *.file_extension` to add files to blimp."
         else
           filepaths.each_with_index do |filepath, index|
-            puts "(#{index+1}/#{filepaths.count})"
+            progress = "(#{index+1}/#{filepaths.count})".yellow
             key = "#{Blimp.project_root}/#{dir_name}/#{filepath}"
             if Blimp::Utils.file_and_object_match?(filepath, bucket.objects[key])
-              puts "Warning: #{key} exists exactly, skipping upload. Create a new commit if you want to upload this file."
+              puts "#{progress} Warning: #{key} exists exactly, skipping upload. Create a new commit if you want to upload this file."
             else
-              puts "Uploading #{s3.hostname}/#{s3.bucket_name}/#{key}"
+              puts "#{progress} Uploading #{s3.hostname.light_blue}/#{s3.bucket_name.light_blue}/#{key.light_blue}"
               upload_object key, filepath
             end
           end

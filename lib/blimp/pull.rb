@@ -36,7 +36,7 @@ module Blimp
         objects.each_with_index do |object, index|
           local_key = local_key_for_object(object, sha)
           progress = "(#{index+1}/#{objects.count})".yellow
-          puts "#{progress} #{'Downloading'.magenta} #{object.key.magenta}..."
+          puts "#{progress} Downloading #{object.key.light_blue}"
           download object, local_key
         end
         puts "Downloaded #{objects.count} objects.".green
@@ -53,7 +53,7 @@ module Blimp
             puts "Skipping #{object.key}. Push, delete, or move this file and `blimp pull` to resynchronize."
           end
         elsif Blimp::Utils.file_and_object_match?(path, object)
-          puts "Your local is up to date, skipping..."
+          puts "Your local is up to date, skipping...".black
           return
         end
       else
