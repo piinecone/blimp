@@ -45,7 +45,7 @@ module Blimp
 
     def self.download(object, path)
       if File.exists?(path)
-        if File.mtime(path) > object.last_modified
+        if File.stat(path).mtime > object.last_modified
           response = user_wants_to_overwrite_local_copy? path
           if response == 'y'
             write_object_to_path object, path
@@ -55,6 +55,8 @@ module Blimp
         elsif Blimp::Utils.file_and_object_match?(path, object)
           puts "Your local is up to date, skipping...".black
           return
+        else
+          write_object_to_path object, path
         end
       else
         write_object_to_path object, path
