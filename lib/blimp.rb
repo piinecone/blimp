@@ -1,5 +1,4 @@
 require 'blimp/color'
-require 'pry'
 
 module Blimp
   def self.project_root
