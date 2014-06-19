@@ -16,7 +16,7 @@ module Blimp
             progress = "(#{index+1}/#{filepaths.count})".yellow
             key = "#{Blimp.project_root}/#{dir_name}/#{filepath}"
             if Blimp::Utils.file_and_object_match?(filepath, bucket.objects[key])
-              puts "#{progress} Warning: #{key} exists exactly, skipping upload. Create a new commit if you want to upload this file."
+              puts "#{progress} #{key.blue} exists exactly, skipping upload. Create a new commit if you want to upload this file.'"
             else
               puts "#{progress} Uploading #{s3.hostname.light_blue}/#{s3.bucket_name.light_blue}/#{key.light_blue}"
               upload_object key, filepath
@@ -35,7 +35,7 @@ module Blimp
         previous_key = "#{Blimp.project_root}/#{previous_sha}/#{filepath}"
         object = bucket.objects[previous_key]
         if Blimp::Utils.file_and_object_match?(filepath, object)
-          puts "#{key} is unchanged; updating its location"
+          puts "#{key} is unchanged; updating its location".black
           object.copy_to(key) # associate it with the current SHA
           return
         else
