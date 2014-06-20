@@ -19,7 +19,7 @@ Installation
 
 * `gem install aws-sdk`
 * `gem install aws-sdk-core --pre`
-* `git clone git@github.com:piinecone/blimp.git /cool/blimp/path/`
+* `git clone https://github.com/piinecone/blimp.git ~/cool/blimp/path/`
 * add /cool/blimp/path/bin to your $PATH; e.g.:
 
    `echo 'export PATH=$PATH:/cool/blimp/path/bin' >> ~/.bash_profile`
@@ -42,7 +42,7 @@ Installation
 * run git bash
 * `gem install aws-sdk`
 * `gem install aws-sdk-core --pre`
-* `git clone git@github.com:piinecone/blimp.git ~/cool/blimp/path/`
+* `git clone https://github.com/piinecone/blimp.git ~/cool/blimp/path/`
 * add ~/cool/blimp/path/bin to your $PATH; e.g.:
 
    `echo 'export PATH=$PATH:~/cool/blimp/path/bin' >> ~/.bash_profile`
