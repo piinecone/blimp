@@ -88,13 +88,17 @@ How it works
 Caveats
 -------
 
-Todos
------
+Todo
+----
 
-* Add a `blimp prune` command to delete folders for older revisions
-* Make the skip file functionality of `blimp push` and `blimp pull` smarter (and faster)
-* Do not upload or download files matching patterns listed in `.blimpignore`
+* Integrate with `git`
+* Don't add file extensions to `.gitignore`, instead allow `git` to version references to the files
+* Skip files listed in `.gitignore`
+* Do not overwrite files if versions differ; instead, create `filename_#{sha}.extension`
+* Add a `blimp prune` command to delete S3 objects from older revisions
+* Only `blimp push` and `blimp pull` files that have changed according to git
 * Update `blimp status` to show only the files that differ from their remote counterparts
+* Attach git history as metadata to S3 objects
 * Create an automated test suite
 * Reduce dependencies
 
